@@ -3,6 +3,7 @@ import './App.css';
 import Header from './Header';
 import Post from './Post';
 import { db } from './firebase';
+import { Container, Row, Col } from 'react-bootstrap';
 
 function App() {
   const [posts, setPosts] = React.useState([]);
@@ -20,16 +21,22 @@ function App() {
       <Header />
 
       <div>
-        {posts.map((post) => (
-          <Post
-            // key={id}
-            imageUrl={post.imageUrl}
-            movieName={post.movieName}
-            releaseYear={post.releaseYear}
-            ticketPrice={post.ticketPrice}
-            timestamp={post.timestamp}
-          />
-        ))}
+        <Container className='mt-5'>
+          <Row>
+            {posts.map((post) => (
+              <Col xs={6} md={4}>
+                <Post
+                  // key={id}
+                  imageUrl={post.imageUrl}
+                  movieName={post.movieName}
+                  releaseYear={post.releaseYear}
+                  ticketPrice={post.ticketPrice}
+                  timestamp={post.timestamp}
+                />
+              </Col>
+            ))}
+          </Row>
+        </Container>
       </div>
     </div>
   );
