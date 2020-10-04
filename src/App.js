@@ -27,6 +27,7 @@ function App() {
             movieName={post.movieName}
             releaseYear={post.releaseYear}
             ticketPrice={post.ticketPrice}
+            timestamp={post.timestamp}
           />
         ))}
       </div>

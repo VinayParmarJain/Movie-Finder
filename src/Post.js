@@ -1,7 +1,8 @@
 import React from 'react';
 import { Card, ListGroupItem, ListGroup, Container } from 'react-bootstrap';
 
-function Post({ imageUrl, movieName, ticketPrice, releaseYear }) {
+function Post({ imageUrl, movieName, ticketPrice, releaseYear, timestamp }) {
+  console.log(timestamp);
   return (
     <Container>
       <Card className='box' style={{ width: '18rem' }}>
@@ -11,6 +12,7 @@ function Post({ imageUrl, movieName, ticketPrice, releaseYear }) {
           <ListGroup className='list-group-flush'>
             <ListGroupItem>Ticket Price : {ticketPrice}</ListGroupItem>
             <ListGroupItem>Year of release : {releaseYear}</ListGroupItem>
+            {/* <ListGroupItem>Created at : {uploadTime}</ListGroupItem> */}
           </ListGroup>
         </Card.Body>
       </Card>
