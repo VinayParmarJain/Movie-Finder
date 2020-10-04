@@ -18,16 +18,18 @@ function Header() {
   return (
     <div className='header'>
       <Navbar bg='dark' variant='dark'>
-        <Navbar.Brand href='#home'>Movie Finder</Navbar.Brand>
+        <Navbar.Brand className='ml-5' href='#home'>
+          Movie Finder
+        </Navbar.Brand>
         <Nav className='mr-auto'>
-          <Form inline>
+          <Form inline className='ml-5'>
             <FormControl type='text' placeholder='Search' className='mr-sm-2' />
           </Form>
         </Nav>
 
         {/* Add Movies  */}
 
-        <Button variant='outline-info' onClick={handleShoww}>
+        <Button className='mr-2' variant='outline-info' onClick={handleShoww}>
           Add Book
         </Button>
 
@@ -47,7 +49,7 @@ function Header() {
 
         {/* Login */}
 
-        <Button variant='outline-primary' onClick={handleShow}>
+        <Button className='mr-2' variant='outline-primary' onClick={handleShow}>
           Login
         </Button>
 
@@ -80,7 +82,10 @@ function Header() {
 
         {/* SignUp */}
 
-        <Button variant='outline-primary' onClick={handleShows}>
+        <Button
+          className='mr-5'
+          variant='outline-primary'
+          onClick={handleShows}>
           SignUp
         </Button>
 

@@ -21,10 +21,10 @@ function App() {
       <Header />
 
       <div>
-        <Container className='mt-5'>
+        <Container>
           <Row>
             {posts.map((post) => (
-              <Col xs={6} md={4}>
+              <Col className='mt-5' xs={6} md={4}>
                 <Post
                   // key={id}
                   imageUrl={post.imageUrl}
