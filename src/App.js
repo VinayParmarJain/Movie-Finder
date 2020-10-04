@@ -26,7 +26,7 @@ function App() {
             {posts.map((post) => (
               <Col className='mt-5' xs={6} md={4}>
                 <Post
-                  // key={id}
+                  // key={0}
                   imageUrl={post.imageUrl}
                   movieName={post.movieName}
                   releaseYear={post.releaseYear}

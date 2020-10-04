@@ -1,19 +1,59 @@
 import React, { useState } from 'react';
 import { Navbar, Nav, Form, FormControl, Button, Modal } from 'react-bootstrap';
 import AddMovie from './AddMovie';
+import { auth } from './firebase';
 
 function Header() {
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const [shows, setShows] = useState(false);
-  const handleShows = () => setShows(true);
-  const handleClosed = () => setShows(false);
-
+  const [showLogin, setShowLogin] = useState('');
+  const [showSignUp, setShowSignUp] = useState(false);
   const [showss, setShowss] = useState(false);
-  const handleClosedd = () => setShowss(false);
-  const handleShoww = () => setShowss(true);
+  const [username, setUsername] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [user, setUser] = React.useState(null);
+
+  React.useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        // user logged in...
+        console.log(authUser);
+        setUser(authUser);
+      } else {
+        setUser(null);
+        // user logged out...
+      }
+    });
+
+    return () => {
+      // Perform some cleanup actions
+      unsubscribe();
+    };
+  }, [user, username]);
+
+  const signUp = (event) => {
+    event.preventDefault();
+
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((authUser) => {
+        return authUser.user.updateProfile({
+          displayName: username,
+        });
+      })
+      .catch((error) => alert(error.message));
+
+    setShowSignUp(false);
+  };
+
+  const signIn = (event) => {
+    event.preventDefault();
+
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .catch((error) => alert(error.message));
+
+    setShowLogin(false);
+  };
 
   return (
     <div className='header'>
@@ -28,32 +68,64 @@ function Header() {
         </Nav>
 
         {/* Add Movies  */}
-
+        {/* 
         <Button className='mr-2' variant='outline-info' onClick={handleShoww}>
           Add Book
-        </Button>
+        </Button> */}
 
-        <Modal show={showss} onHide={handleClosedd}>
+        <Modal show={showss} onHide={setShowss}>
           <Modal.Header closeButton>
             <Modal.Title>Add a Movie</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <AddMovie />
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant='secondary' onClick={handleClosedd}>
-              Close
-            </Button>
-          </Modal.Footer>
+        </Modal>
+
+        {/* SignUp */}
+
+        <Modal show={showSignUp} onHide={setShowSignUp}>
+          <Modal.Header closeButton>
+            <Modal.Title>SignUp</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group controlId='text'>
+                <Form.Label>User Name</Form.Label>
+                <Form.Control
+                  type='text'
+                  placeholder='User Name'
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group controlId='formBasicEmail'>
+                <Form.Label>Email address</Form.Label>
+                <Form.Control
+                  type='email'
+                  placeholder='Enter email'
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group controlId='formBasicPassword'>
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type='password'
+                  placeholder='Password'
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Form.Group>
+              <Button variant='primary' type='submit' onClick={signUp}>
+                SignUp
+              </Button>
+            </Form>
+          </Modal.Body>
         </Modal>
 
         {/* Login */}
 
-        <Button className='mr-2' variant='outline-primary' onClick={handleShow}>
-          Login
-        </Button>
-
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={showLogin} onHide={setShowLogin}>
           <Modal.Header closeButton>
             <Modal.Title>Login</Modal.Title>
           </Modal.Header>
@@ -68,58 +140,40 @@ function Header() {
                 <Form.Label>Password</Form.Label>
                 <Form.Control type='password' placeholder='Password' />
               </Form.Group>
-              <Button variant='primary' type='submit'>
+              <Button variant='primary' type='submit' onClick={signIn}>
                 Login
               </Button>
             </Form>
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant='secondary' onClick={handleClose}>
-              Close
-            </Button>
-          </Modal.Footer>
         </Modal>
 
-        {/* SignUp */}
-
-        <Button
-          className='mr-5'
-          variant='outline-primary'
-          onClick={handleShows}>
-          SignUp
-        </Button>
-
-        <Modal show={shows} onHide={handleClosed}>
-          <Modal.Header closeButton>
-            <Modal.Title>SignUp</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group controlId='text'>
-                <Form.Label>User Name</Form.Label>
-                <Form.Control type='text' placeholder='User Name' />
-              </Form.Group>
-
-              <Form.Group controlId='formBasicEmail'>
-                <Form.Label>Email address</Form.Label>
-                <Form.Control type='email' placeholder='Enter email' />
-              </Form.Group>
-
-              <Form.Group controlId='formBasicPassword'>
-                <Form.Label>Password</Form.Label>
-                <Form.Control type='password' placeholder='Password' />
-              </Form.Group>
-              <Button variant='primary' type='submit'>
-                SignUp
+        <div className='app__header'>
+          {user ? (
+            <>
+              <Button
+                className='mr-2'
+                variant='outline-info'
+                onClick={() => setShowss(true)}>
+                Add Book
               </Button>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant='secondary' onClick={handleClosed}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
+              <Button onClick={() => auth.signOut()}>Logout</Button>
+            </>
+          ) : (
+            <div className='app__loginContainer'>
+              <Button
+                style={{ display: 'none' }}
+                variant='outline-primary'
+                onClick={() => setShowLogin(true)}>
+                Sign In
+              </Button>
+              <Button
+                variant='outline-primary'
+                onClick={() => setShowSignUp(true)}>
+                Sign Up
+              </Button>
+            </div>
+          )}
+        </div>
       </Navbar>
     </div>
   );

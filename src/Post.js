@@ -2,8 +2,8 @@ import React from 'react';
 import { Card, ListGroupItem, ListGroup } from 'react-bootstrap';
 
 function Post({ imageUrl, movieName, ticketPrice, releaseYear, timestamp }) {
-  var stringified = timestamp.toDate().toDateString();
-  console.log(stringified);
+  // var stringified = timestamp.toDate().toDateString();
+  // console.log(stringified);
 
   return (
     <Card className='box' style={{ width: '18rem' }}>
@@ -11,11 +11,11 @@ function Post({ imageUrl, movieName, ticketPrice, releaseYear, timestamp }) {
       <Card.Body>
         <Card.Title>{movieName}</Card.Title>
         <ListGroup className='list-group-flush'>
-          <ListGroupItem>Ticket Price : {ticketPrice}</ListGroupItem>
           <ListGroupItem>Year of release : {releaseYear}</ListGroupItem>
-          <ListGroupItem style={{ fontSize: '14px' }}>
+          <ListGroupItem>Ticket Price : {ticketPrice}</ListGroupItem>
+          {/* <ListGroupItem style={{ fontSize: '14px' }}>
             Created on :{stringified}
-          </ListGroupItem>
+          </ListGroupItem> */}
         </ListGroup>
       </Card.Body>
     </Card>
